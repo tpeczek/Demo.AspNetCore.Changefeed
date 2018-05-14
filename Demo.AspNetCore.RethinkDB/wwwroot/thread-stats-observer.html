@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Thread Stats Changefeed</title>
+</head>
+<body>
+    <div id="changefeed"></div>
+    <script>
+        var changefeed = document.getElementById('changefeed');
+        var appendToChangefeed = function(data) {
+            changefeed.appendChild(document.createTextNode(data));
+            changefeed.appendChild(document.createElement('br'));
+        };
+
+        if (!!window.EventSource) {
+            var changefeedSource = new EventSource('/thread-stats-changefeed');
+            changefeedSource.onopen = function () { appendToChangefeed('-- CHANGEFEED OPENED --'); };
+            changefeedSource.onerror = function () { appendToChangefeed('-- CHANGEFEED ERROR --'); };
+
+            changefeedSource.onmessage = function (event) {
+                appendToChangefeed(event.data);
+
+                if (event.id == 'CLOSE') {
+                    changefeedSource.close();
+                }
+            };
+        } else {
+            var webSocket = new WebSocket('ws://localhost:60002/thread-stats-changefeed-fallback');
+            webSocket.onopen = function () { appendToChangefeed('-- CHANGEFEED OPENED --'); };
+            webSocket.onerror = function () { appendToChangefeed('-- CHANGEFEED ERROR --'); };
+            webSocket.onmessage = function (message) { appendToChangefeed(message.data); };
+        }
+    </script>
+</body>
+</html>
