@@ -1,6 +1,8 @@
 # Demo.AspNetCore.RethinkDB
 
-Sample application showing how to expose [RethinkDB](https://github.com/rethinkdb/rethinkdb) changefeed from ASP.NET Core.
+Sample application showing how to expose [RethinkDB](https://github.com/rethinkdb/rethinkdb) changefeed from ASP.NET Core:
+
+- [Exposing RethinkDB changefeed from ASP.NET Core](https://www.tpeczek.com/2018/05/exposing-rethinkdb-changefeed-from.html)
 
 ## Donating
 
