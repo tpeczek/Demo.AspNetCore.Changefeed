@@ -34,7 +34,7 @@ namespace Demo.AspNetCore.RethinkDB.Services
 
         public static IServiceCollection AddThreadStats(this IServiceCollection services)
         {
-            services.AddSingleton<IHostedService, ThreadStatsService>();
+            services.AddSingleton<IHostedService, ThreadStatsGatherBackgroundService>();
             services.AddSingleton<IHostedService, ThreadStatsChangefeedService>();
 
             return services;
