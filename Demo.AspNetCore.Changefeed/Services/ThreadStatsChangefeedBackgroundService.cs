@@ -21,7 +21,7 @@ namespace Demo.AspNetCore.Changefeed.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            IThreadStatsChangefeed threadStatsChangefeed = await _threadStatsChangefeedDbService.GetThreadStatsChangefeedAsync(stoppingToken);
+            IChangefeed<ThreadStats> threadStatsChangefeed = await _threadStatsChangefeedDbService.GetThreadStatsChangefeedAsync(stoppingToken);
 
             while (!stoppingToken.IsCancellationRequested && (await threadStatsChangefeed.MoveNextAsync(stoppingToken)))
             {

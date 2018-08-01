@@ -45,9 +45,11 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
             _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Insert(threadStats).Run(_rethinkDbConnection);
         }
 
-        public async Task<IThreadStatsChangefeed> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
+        public async Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
         {
-            return new ThreadStatsRethinkDbChangefeed(await _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Changes().RunChangesAsync<ThreadStats>(_rethinkDbConnection, cancellationToken));
+            return new RethinkDbChangefeed<ThreadStats>(
+                await _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Changes().RunChangesAsync<ThreadStats>(_rethinkDbConnection, cancellationToken)
+            );
         }
     }
 }

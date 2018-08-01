@@ -9,6 +9,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Abstractions
 
         void InsertThreadStats(ThreadStats threadStats);
 
-        Task<IThreadStatsChangefeed> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken);
+        Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken);
     }
 }

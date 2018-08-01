@@ -6,13 +6,13 @@ using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
 namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
-    internal class ThreadStatsRethinkDbChangefeed : IThreadStatsChangefeed
+    internal class RethinkDbChangefeed<T> : IChangefeed<T>
     {
-        private readonly Cursor<Change<ThreadStats>> _changefeed;
+        private readonly Cursor<Change<T>> _changefeed;
 
-        public ThreadStats CurrentNewValue { get { return _changefeed.Current.NewValue; } }
+        public T CurrentNewValue { get { return _changefeed.Current.NewValue; } }
 
-        public ThreadStatsRethinkDbChangefeed(Cursor<Change<ThreadStats>> changefeed)
+        public RethinkDbChangefeed(Cursor<Change<T>> changefeed)
         {
             _changefeed = changefeed;
         }
