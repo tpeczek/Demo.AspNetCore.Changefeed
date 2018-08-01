@@ -9,7 +9,7 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
     internal class ThreadStatsRethinkDbService : IThreadStatsChangefeedDbService
     {
-        private const string DATABASE_NAME = "Demo_AspNetCore_RethinkDB";
+        private const string DATABASE_NAME = "Demo_AspNetCore_Changefeed_RethinkDB";
         private const string THREAD_STATS_TABLE_NAME = "ThreadStats";
 
         private readonly RethinkDb.Driver.RethinkDB _rethinkDbSingleton;
@@ -40,9 +40,11 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
             }
         }
 
-        public void InsertThreadStats(ThreadStats threadStats)
+        public Task InsertThreadStatsAsync(ThreadStats threadStats)
         {
             _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Insert(threadStats).Run(_rethinkDbConnection);
+
+            return Task.CompletedTask;
         }
 
         public async Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)

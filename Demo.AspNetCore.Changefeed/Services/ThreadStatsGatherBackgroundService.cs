@@ -23,7 +23,7 @@ namespace Demo.AspNetCore.Changefeed.Services
                 ThreadPool.GetMinThreads(out var minThreads, out var _);
                 ThreadPool.GetMaxThreads(out var maxThreads, out var _);
 
-                _threadStatsChangefeedDbService.InsertThreadStats(new ThreadStats
+                await _threadStatsChangefeedDbService.InsertThreadStatsAsync(new ThreadStats
                 {
                     WorkerThreads = workerThreads,
                     MinThreads = minThreads,

@@ -7,7 +7,7 @@ namespace Demo.AspNetCore.Changefeed.Services.Abstractions
     {
         void EnsureDatabaseCreated();
 
-        void InsertThreadStats(ThreadStats threadStats);
+        Task InsertThreadStatsAsync(ThreadStats threadStats);
 
         Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken);
     }

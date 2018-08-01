@@ -8,6 +8,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj" />
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.RethinkDB\Demo.AspNetCore.Changefeed.Services.RethinkDB.csproj" />
   </ItemGroup>
 </Project>

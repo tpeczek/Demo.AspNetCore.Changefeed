@@ -3,8 +3,10 @@ using Microsoft.Extensions.Options;
 
 namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
-    internal class RethinkDbSingletonProvider : IRethinkDbSingletonProvider
+    internal class RethinkDbSingletonProvider : IRethinkDbSingletonProvider, IDisposable
     {
+        private bool _disposed = false;
+
         public RethinkDb.Driver.RethinkDB RethinkDbSingleton { get; }
 
         public RethinkDb.Driver.Net.Connection RethinkDbConnection { get; }
@@ -38,6 +40,18 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
             RethinkDbConnection = rethinkDbConnection.Connect();
 
             RethinkDbSingleton = rethinkDbSingleton;
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                RethinkDbConnection.Dispose();
+
+                GC.SuppressFinalize(this);
+
+                _disposed = true;
+            }
         }
     }
 }
