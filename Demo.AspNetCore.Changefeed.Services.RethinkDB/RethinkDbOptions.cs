@@ -1,6 +1,6 @@
-﻿namespace Demo.AspNetCore.RethinkDB.Services
+﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
-    internal class RethinkDbOptions
+    public class RethinkDbOptions
     {
         public string HostnameOrIp { get; set; }
 

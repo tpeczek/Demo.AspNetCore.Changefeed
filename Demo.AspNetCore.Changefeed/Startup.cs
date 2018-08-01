@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Lib.AspNetCore.ServerSentEvents;
-using Demo.AspNetCore.RethinkDB.Services;
-using Demo.AspNetCore.RethinkDB.Middlewares;
+using Demo.AspNetCore.Changefeed.Services;
+using Demo.AspNetCore.Changefeed.Services.RethinkDB;
+using Demo.AspNetCore.Changefeed.Services.Abstractions;
+using Demo.AspNetCore.Changefeed.Middlewares;
 
-namespace Demo.AspNetCore.RethinkDB
+namespace Demo.AspNetCore.Changefeed
 {
     public class Startup
     {
@@ -35,7 +37,7 @@ namespace Demo.AspNetCore.RethinkDB
                 app.UseDeveloperExceptionPage();
             }
 
-            services.GetService<IRethinkDbService>().EnsureDatabaseCreated();
+            services.GetService<IThreadStatsChangefeedDbService>().EnsureDatabaseCreated();
 
             app.MapServerSentEvents("/thread-stats-changefeed");
 

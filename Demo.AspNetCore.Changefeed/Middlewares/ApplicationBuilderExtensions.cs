@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
-namespace Demo.AspNetCore.RethinkDB.Middlewares
+namespace Demo.AspNetCore.Changefeed.Middlewares
 {
     internal static class ApplicationBuilderExtensions
     {

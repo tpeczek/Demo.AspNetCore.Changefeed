@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 using Microsoft.AspNetCore.Http;
-using Demo.AspNetCore.RethinkDB.Services;
+using Demo.AspNetCore.Changefeed.Services;
 
-namespace Demo.AspNetCore.RethinkDB.Middlewares
+namespace Demo.AspNetCore.Changefeed.Middlewares
 {
     internal class WebSocketConnectionsMiddleware
     {

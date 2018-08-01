@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace Demo.AspNetCore.RethinkDB
+namespace Demo.AspNetCore.Changefeed
 {
     public class Program
     {

@@ -1,6 +1,6 @@
-﻿namespace Demo.AspNetCore.RethinkDB.Services
+﻿namespace Demo.AspNetCore.Changefeed.Services.Abstractions
 {
-    internal class ThreadStats
+    public class ThreadStats
     {
         public int WorkerThreads { get; set; }
 

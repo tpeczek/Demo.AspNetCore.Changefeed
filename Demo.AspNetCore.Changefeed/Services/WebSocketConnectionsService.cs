@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-namespace Demo.AspNetCore.RethinkDB.Services
+namespace Demo.AspNetCore.Changefeed.Services
 {
     internal class WebSocketConnectionsService : IWebSocketConnectionsService
     {

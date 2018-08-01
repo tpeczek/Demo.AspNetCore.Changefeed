@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Demo.AspNetCore.RethinkDB.Services
+namespace Demo.AspNetCore.Changefeed.Services
 {
     internal interface IWebSocketConnectionsService
     {

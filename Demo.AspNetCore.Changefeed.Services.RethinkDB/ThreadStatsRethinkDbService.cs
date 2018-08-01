@@ -3,11 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using RethinkDb.Driver.Net;
-using RethinkDb.Driver.Model;
+using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.RethinkDB.Services
+namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
-    internal class RethinkDbService: IRethinkDbService
+    internal class ThreadStatsRethinkDbService : IThreadStatsChangefeedDbService
     {
         private const string DATABASE_NAME = "Demo_AspNetCore_RethinkDB";
         private const string THREAD_STATS_TABLE_NAME = "ThreadStats";
@@ -15,7 +15,7 @@ namespace Demo.AspNetCore.RethinkDB.Services
         private readonly RethinkDb.Driver.RethinkDB _rethinkDbSingleton;
         private readonly Connection _rethinkDbConnection;
 
-        public RethinkDbService(IRethinkDbSingletonProvider rethinkDbSingletonProvider)
+        public ThreadStatsRethinkDbService(IRethinkDbSingletonProvider rethinkDbSingletonProvider)
         {
             if (rethinkDbSingletonProvider == null)
             {
@@ -45,9 +45,9 @@ namespace Demo.AspNetCore.RethinkDB.Services
             _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Insert(threadStats).Run(_rethinkDbConnection);
         }
 
-        public Task<Cursor<Change<ThreadStats>>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
+        public async Task<IThreadStatsChangefeed> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
         {
-            return _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Changes().RunChangesAsync<ThreadStats>(_rethinkDbConnection, cancellationToken);
+            return new ThreadStatsRethinkDbChangefeed(await _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Changes().RunChangesAsync<ThreadStats>(_rethinkDbConnection, cancellationToken));
         }
     }
 }

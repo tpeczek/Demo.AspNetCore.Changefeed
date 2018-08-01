@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.WebSockets;
 
-namespace Demo.AspNetCore.RethinkDB.Services
+namespace Demo.AspNetCore.Changefeed.Services
 {
     internal class WebSocketConnection
     {

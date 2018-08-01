@@ -2,16 +2,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.RethinkDB.Services
+namespace Demo.AspNetCore.Changefeed.Services
 {
     internal class ThreadStatsGatherBackgroundService : BackgroundService
     {
-        private readonly IRethinkDbService _rethinkDbService;
+        private readonly IThreadStatsChangefeedDbService _threadStatsChangefeedDbService;
 
-        public ThreadStatsGatherBackgroundService(IRethinkDbService rethinkDbService)
+        public ThreadStatsGatherBackgroundService(IThreadStatsChangefeedDbService threadStatsChangefeedDbService)
         {
-            _rethinkDbService = rethinkDbService;
+            _threadStatsChangefeedDbService = threadStatsChangefeedDbService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -22,7 +23,7 @@ namespace Demo.AspNetCore.RethinkDB.Services
                 ThreadPool.GetMinThreads(out var minThreads, out var _);
                 ThreadPool.GetMaxThreads(out var maxThreads, out var _);
 
-                _rethinkDbService.InsertThreadStats(new ThreadStats
+                _threadStatsChangefeedDbService.InsertThreadStats(new ThreadStats
                 {
                     WorkerThreads = workerThreads,
                     MinThreads = minThreads,

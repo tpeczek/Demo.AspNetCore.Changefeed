@@ -1,4 +1,4 @@
-﻿namespace Demo.AspNetCore.RethinkDB.Services
+﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
     internal interface IRethinkDbSingletonProvider
     {
