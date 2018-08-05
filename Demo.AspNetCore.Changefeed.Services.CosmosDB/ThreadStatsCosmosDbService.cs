@@ -33,7 +33,11 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
 
         public Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult<IChangefeed<ThreadStats>>(new CosmosDbChangefeed<ThreadStats>());
+            return Task.FromResult<IChangefeed<ThreadStats>>(new CosmosDbChangefeed<ThreadStats>(
+                _documentClientSingleton,
+                _threadStatsCollectionUri,
+                TimeSpan.FromSeconds(1)
+            ));
         }
 
         public Task InsertThreadStatsAsync(ThreadStats threadStats)
