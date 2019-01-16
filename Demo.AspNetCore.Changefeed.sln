@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.RethinkDB", "Demo.AspNetCore.Changefeed.Services.RethinkDB\Demo.AspNetCore.Changefeed.Services.RethinkDB.csproj", "{270A778D-A060-4853-88FF-8DBD03C1B94C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.CosmosDB", "Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.CosmosDB", "Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.MongoDB", "Demo.AspNetCore.Changefeed.Services.MongoDB\Demo.AspNetCore.Changefeed.Services.MongoDB.csproj", "{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

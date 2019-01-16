@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace Demo.AspNetCore.Changefeed.Services.Abstractions
 {
-    public interface IChangefeed<T>
+    public interface IChangefeed<out T>
     {
         T CurrentNewValue { get; }
 
