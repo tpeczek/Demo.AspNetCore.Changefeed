@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using RethinkDb.Driver.Net;
 using RethinkDb.Driver.Model;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
 {
@@ -10,16 +12,17 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
     {
         private readonly Cursor<Change<T>> _changefeed;
 
-        public T CurrentNewValue { get { return _changefeed.Current.NewValue; } }
-
         public RethinkDbChangefeed(Cursor<Change<T>> changefeed)
         {
             _changefeed = changefeed;
         }
 
-        public Task<bool> MoveNextAsync(CancellationToken cancelToken = default(CancellationToken))
+        public async IAsyncEnumerable<T> FetchFeed([EnumeratorCancellation]CancellationToken cancellationToken = default)
         {
-            return _changefeed.MoveNextAsync(cancelToken);
+            while (await _changefeed.MoveNextAsync(cancellationToken))
+            {
+                yield return _changefeed.Current.NewValue;
+            }
         }
     }
 }

@@ -23,9 +23,9 @@ namespace Demo.AspNetCore.Changefeed.Services
         {
             IChangefeed<ThreadStats> threadStatsChangefeed = await _threadStatsChangefeedDbService.GetThreadStatsChangefeedAsync(stoppingToken);
 
-            while (!stoppingToken.IsCancellationRequested && (await threadStatsChangefeed.MoveNextAsync(stoppingToken)))
+            await foreach (ThreadStats threadStatsChange in threadStatsChangefeed.FetchFeed(stoppingToken))
             {
-                string newThreadStats = threadStatsChangefeed.CurrentNewValue.ToString();
+                string newThreadStats = threadStatsChange.ToString();
                 await Task.WhenAll(
                     _serverSentEventsService.SendEventAsync(newThreadStats),
                     _webSocketConnectionsService.SendToAllAsync(newThreadStats)

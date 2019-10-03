@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Linq;
 using Microsoft.Azure.Documents.Client;
@@ -23,8 +24,6 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
         private List<PartitionKeyRange> _collectionPartitionKeyRanges;
         private readonly Dictionary<string, string> _collectionPartitionKeyRangesCheckpoints = new Dictionary<string, string>();
 
-        public T CurrentNewValue { get; set; } = default(T);
-
         public CosmosDbChangefeed(DocumentClient documentClient, Uri collectionUri, TimeSpan feedPollDelay)
         {
             _documentClient = documentClient;
@@ -32,68 +31,51 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
             _feedPollDelay = feedPollDelay;
         }
 
-        public async Task<bool> MoveNextAsync(CancellationToken cancelToken = default(CancellationToken))
+        public async IAsyncEnumerable<T> FetchFeed([EnumeratorCancellation]CancellationToken cancellationToken = default)
         {
-            while (!cancelToken.IsCancellationRequested)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                if (MoveCollectionChangeFeedEnumeratorNext())
+                await ReadCollectionPartitionKeyRanges();
+
+                while (CreateDocumentChangeFeedQueryForNextPartitionKeyRange())
                 {
-                    return true;
+                    while (await ExecuteCollectionChangeFeedQueryNextResultAsync(cancellationToken))
+                    {
+                        while (MoveCollectionChangeFeedEnumeratorNext())
+                        {
+                            yield return _collectionChangeFeedEnumerator.Current;
+                        }
+                    }
                 }
 
-                if (await ExecuteCollectionChangeFeedQueryNextResultAsync(cancelToken))
-                {
-                    continue;
-                }
-
-                if (CreateDocumentChangeFeedQueryForNextPartitionKeyRange(cancelToken))
-                {
-                    continue;
-                }
-
-                await WaitForNextPoll(cancelToken);
-
-                await ReadCollectionPartitionKeyRanges(cancelToken);
+                await WaitForNextPoll(cancellationToken);
             }
-
-            return false;
         }
 
-        private bool MoveCollectionChangeFeedEnumeratorNext()
+        private async Task ReadCollectionPartitionKeyRanges()
         {
-            if (_collectionChangeFeedEnumerator != null)
+            List<PartitionKeyRange> collectionPartitionKeyRanges = new List<PartitionKeyRange>();
+
+            string collectionPartitionKeyRangesResponseContinuation = null;
+            do
             {
-                if (_collectionChangeFeedEnumerator.MoveNext())
+                FeedResponse<PartitionKeyRange> collectionPartitionKeyRangesResponse = await _documentClient.ReadPartitionKeyRangeFeedAsync(_collectionUri, new FeedOptions
                 {
-                    CurrentNewValue = _collectionChangeFeedEnumerator.Current;
-                    return true;
-                }
+                    RequestContinuation = collectionPartitionKeyRangesResponseContinuation
+                });
 
-                _collectionChangeFeedEnumerator.Dispose();
-                _collectionChangeFeedEnumerator = null;
+                collectionPartitionKeyRanges.AddRange(collectionPartitionKeyRangesResponse);
+                collectionPartitionKeyRangesResponseContinuation = collectionPartitionKeyRangesResponse.ResponseContinuation;
             }
+            while (collectionPartitionKeyRangesResponseContinuation != null);
 
-            return false;
+            _collectionPartitionKeyRanges = collectionPartitionKeyRanges;
+            _collectionPartitionKeyRangeIndex = -1;
         }
 
-        private async Task<bool> ExecuteCollectionChangeFeedQueryNextResultAsync(CancellationToken cancelToken)
+        private bool CreateDocumentChangeFeedQueryForNextPartitionKeyRange()
         {
-            if ((_collectionChangeFeedQuery != null) && _collectionChangeFeedQuery.HasMoreResults && !cancelToken.IsCancellationRequested)
-            {
-                FeedResponse<T> collectionChangeFeedResponse = await _collectionChangeFeedQuery.ExecuteNextAsync<T>(cancelToken);
-                _collectionPartitionKeyRangesCheckpoints[_collectionPartitionKeyRanges[_collectionPartitionKeyRangeIndex].Id] = collectionChangeFeedResponse.ResponseContinuation;
-
-                _collectionChangeFeedEnumerator = collectionChangeFeedResponse.GetEnumerator();
-
-                return true;
-            }
-
-            return false;
-        }
-
-        private bool CreateDocumentChangeFeedQueryForNextPartitionKeyRange(CancellationToken cancelToken)
-        {
-            if ((_collectionPartitionKeyRanges != null) && ((++_collectionPartitionKeyRangeIndex) < _collectionPartitionKeyRanges.Count) && !cancelToken.IsCancellationRequested)
+            if ((++_collectionPartitionKeyRangeIndex) < _collectionPartitionKeyRanges.Count)
             {
                 string collectionPartitionKeyRangeCheckpoint = null;
                 _collectionPartitionKeyRangesCheckpoints.TryGetValue(_collectionPartitionKeyRanges[_collectionPartitionKeyRangeIndex].Id, out collectionPartitionKeyRangeCheckpoint);
@@ -112,38 +94,42 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
             return false;
         }
 
-        private Task WaitForNextPoll(CancellationToken cancelToken)
+        private async Task<bool> ExecuteCollectionChangeFeedQueryNextResultAsync(CancellationToken cancellationToken)
         {
-            if ((_collectionPartitionKeyRanges != null) && !cancelToken.IsCancellationRequested)
+            if (_collectionChangeFeedQuery.HasMoreResults && !cancellationToken.IsCancellationRequested)
             {
-                return Task.Delay(_feedPollDelay, cancelToken);
+                FeedResponse<T> collectionChangeFeedResponse = await _collectionChangeFeedQuery.ExecuteNextAsync<T>(cancellationToken);
+                _collectionPartitionKeyRangesCheckpoints[_collectionPartitionKeyRanges[_collectionPartitionKeyRangeIndex].Id] = collectionChangeFeedResponse.ResponseContinuation;
+
+                _collectionChangeFeedEnumerator = collectionChangeFeedResponse.GetEnumerator();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool MoveCollectionChangeFeedEnumeratorNext()
+        {
+            if (_collectionChangeFeedEnumerator.MoveNext())
+            {
+                return true;
+            }
+
+            _collectionChangeFeedEnumerator.Dispose();
+            _collectionChangeFeedEnumerator = null;
+
+            return false;
+        }
+
+        private Task WaitForNextPoll(CancellationToken cancellationToken)
+        {
+            if ((_collectionPartitionKeyRanges != null) && !cancellationToken.IsCancellationRequested)
+            {
+                return Task.Delay(_feedPollDelay, cancellationToken);
             }
 
             return Task.CompletedTask;
-        }
-
-        private async Task ReadCollectionPartitionKeyRanges(CancellationToken cancelToken)
-        {
-            if (!cancelToken.IsCancellationRequested)
-            {
-                List<PartitionKeyRange> collectionPartitionKeyRanges = new List<PartitionKeyRange>();
-
-                string collectionPartitionKeyRangesResponseContinuation = null;
-                do
-                {
-                    FeedResponse<PartitionKeyRange> collectionPartitionKeyRangesResponse = await _documentClient.ReadPartitionKeyRangeFeedAsync(_collectionUri, new FeedOptions
-                    {
-                        RequestContinuation = collectionPartitionKeyRangesResponseContinuation
-                    });
-
-                    collectionPartitionKeyRanges.AddRange(collectionPartitionKeyRangesResponse);
-                    collectionPartitionKeyRangesResponseContinuation = collectionPartitionKeyRangesResponse.ResponseContinuation;
-                }
-                while (collectionPartitionKeyRangesResponseContinuation != null);
-
-                _collectionPartitionKeyRanges = collectionPartitionKeyRanges;
-                _collectionPartitionKeyRangeIndex = -1;
-            }
         }
     }
 }
