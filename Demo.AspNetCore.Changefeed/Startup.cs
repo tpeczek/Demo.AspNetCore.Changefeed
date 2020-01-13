@@ -47,14 +47,12 @@ namespace Demo.AspNetCore.Changefeed
             services.AddThreadStats();
         }
 
-        public void Configure(IApplicationBuilder app, IHostEnvironment env, IServiceProvider services)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            services.GetService<IThreadStatsChangefeedDbService>().EnsureDatabaseCreated();
 
             app.UseWebSockets()
                 .UseStaticFiles()

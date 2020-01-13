@@ -27,8 +27,10 @@ namespace Demo.AspNetCore.Changefeed.Services.MongoDB
             _threadStatsCollection = _threadStatsDatabase.GetCollection<MongoDbThreadStats>(THREAD_STATS_COLLECTION_NAME);
         }
 
-        public void EnsureDatabaseCreated()
-        { }
+        public Task EnsureDatabaseCreatedAsync()
+        {
+            return Task.CompletedTask;
+        }
 
         public Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
         {

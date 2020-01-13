@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Lib.AspNetCore.ServerSentEvents;
@@ -21,16 +22,23 @@ namespace Demo.AspNetCore.Changefeed.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await _threadStatsChangefeedDbService.EnsureDatabaseCreatedAsync();
+
             IChangefeed<ThreadStats> threadStatsChangefeed = await _threadStatsChangefeedDbService.GetThreadStatsChangefeedAsync(stoppingToken);
 
-            await foreach (ThreadStats threadStatsChange in threadStatsChangefeed.FetchFeed(stoppingToken))
+            try
             {
-                string newThreadStats = threadStatsChange.ToString();
-                await Task.WhenAll(
-                    _serverSentEventsService.SendEventAsync(newThreadStats),
-                    _webSocketConnectionsService.SendToAllAsync(newThreadStats)
-                );
+                await foreach (ThreadStats threadStatsChange in threadStatsChangefeed.FetchFeed(stoppingToken))
+                {
+                    string newThreadStats = threadStatsChange.ToString();
+                    await Task.WhenAll(
+                        _serverSentEventsService.SendEventAsync(newThreadStats),
+                        _webSocketConnectionsService.SendToAllAsync(newThreadStats)
+                    );
+                }
             }
+            catch (OperationCanceledException)
+            { }
         }
     }
 }

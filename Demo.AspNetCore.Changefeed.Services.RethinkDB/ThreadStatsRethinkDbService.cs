@@ -26,7 +26,7 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
             _rethinkDbConnection = rethinkDbSingletonProvider.RethinkDbConnection;
         }
 
-        public void EnsureDatabaseCreated()
+        public Task EnsureDatabaseCreatedAsync()
         {
             if (!((string[])_rethinkDbSingleton.DbList().Run(_rethinkDbConnection).ToObject<string[]>()).Contains(DATABASE_NAME))
             {
@@ -38,6 +38,8 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
             {
                 database.TableCreate(THREAD_STATS_TABLE_NAME).Run(_rethinkDbConnection);
             }
+
+            return Task.CompletedTask;
         }
 
         public Task InsertThreadStatsAsync(ThreadStats threadStats)

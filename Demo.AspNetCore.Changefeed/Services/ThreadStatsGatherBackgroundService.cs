@@ -17,6 +17,8 @@ namespace Demo.AspNetCore.Changefeed.Services
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            await _threadStatsChangefeedDbService.EnsureDatabaseCreatedAsync();
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 ThreadPool.GetAvailableThreads(out var workerThreads, out var _);

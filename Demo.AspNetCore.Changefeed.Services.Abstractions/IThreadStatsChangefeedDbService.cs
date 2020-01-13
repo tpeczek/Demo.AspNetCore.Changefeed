@@ -5,7 +5,7 @@ namespace Demo.AspNetCore.Changefeed.Services.Abstractions
 {
     public interface IThreadStatsChangefeedDbService
     {
-        void EnsureDatabaseCreated();
+        Task EnsureDatabaseCreatedAsync();
 
         Task InsertThreadStatsAsync(ThreadStats threadStats);
 

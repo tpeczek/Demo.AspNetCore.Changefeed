@@ -20,8 +20,7 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
             }
 
             services.Configure(configureOptions);
-            services.TryAddSingleton<IDocumentClientSingletonProvider, DocumentClientSingletonProvider>();
-            services.TryAddTransient<IThreadStatsChangefeedDbService, ThreadStatsCosmosDbService>();
+            services.TryAddSingleton<IThreadStatsChangefeedDbService, ThreadStatsCosmosDbService>();
 
             return services;
         }
