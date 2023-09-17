@@ -1,17 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.1
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed", "Demo.AspNetCore.Changefeed\Demo.AspNetCore.Changefeed.csproj", "{B22712D4-FB76-4E7A-AE92-B4AE4B4BD886}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed", "src\Demo.AspNetCore.Changefeed\Demo.AspNetCore.Changefeed.csproj", "{B22712D4-FB76-4E7A-AE92-B4AE4B4BD886}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Abstractions", "Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj", "{30DD0C6A-0D68-4C7E-A6B5-7909E308D233}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Abstractions", "src\Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj", "{30DD0C6A-0D68-4C7E-A6B5-7909E308D233}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.RethinkDB", "Demo.AspNetCore.Changefeed.Services.RethinkDB\Demo.AspNetCore.Changefeed.Services.RethinkDB.csproj", "{270A778D-A060-4853-88FF-8DBD03C1B94C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.RethinkDB", "src\Demo.AspNetCore.Changefeed.Services.RethinkDB\Demo.AspNetCore.Changefeed.Services.RethinkDB.csproj", "{270A778D-A060-4853-88FF-8DBD03C1B94C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.CosmosDB", "Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.CosmosDB", "src\Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.MongoDB", "Demo.AspNetCore.Changefeed.Services.MongoDB\Demo.AspNetCore.Changefeed.Services.MongoDB.csproj", "{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.MongoDB", "src\Demo.AspNetCore.Changefeed.Services.MongoDB\Demo.AspNetCore.Changefeed.Services.MongoDB.csproj", "{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B22712D4-FB76-4E7A-AE92-B4AE4B4BD886} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{30DD0C6A-0D68-4C7E-A6B5-7909E308D233} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{270A778D-A060-4853-88FF-8DBD03C1B94C} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99B406E5-5CB9-4306-808C-311EFD2079A6}

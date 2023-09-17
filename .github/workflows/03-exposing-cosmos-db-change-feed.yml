@@ -1,0 +1,8 @@
+name: 03. Exposing Cosmos DB Change Feed
+on: workflow_dispatch
+jobs:
+    deploy:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
