@@ -7,13 +7,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Abstractions", "src\Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj", "{30DD0C6A-0D68-4C7E-A6B5-7909E308D233}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.RethinkDB", "src\Demo.AspNetCore.Changefeed.Services.RethinkDB\Demo.AspNetCore.Changefeed.Services.RethinkDB.csproj", "{270A778D-A060-4853-88FF-8DBD03C1B94C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.RethinkDb", "src\Demo.AspNetCore.Changefeed.Services.RethinkDb\Demo.AspNetCore.Changefeed.Services.RethinkDb.csproj", "{270A778D-A060-4853-88FF-8DBD03C1B94C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.CosmosDB", "src\Demo.AspNetCore.Changefeed.Services.CosmosDB\Demo.AspNetCore.Changefeed.Services.CosmosDB.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Azure.Cosmos", "src\Demo.AspNetCore.Changefeed.Services.Azure.Cosmos\Demo.AspNetCore.Changefeed.Services.Azure.Cosmos.csproj", "{6D514F12-FBF5-4375-B979-8E1F3B81ADDE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.MongoDB", "src\Demo.AspNetCore.Changefeed.Services.MongoDB\Demo.AspNetCore.Changefeed.Services.MongoDB.csproj", "{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Mongo", "src\Demo.AspNetCore.Changefeed.Services.Mongo\Demo.AspNetCore.Changefeed.Services.Mongo.csproj", "{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs", "src\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs.csproj", "{6949C55E-34A8-4308-9B81-26798ACFE08B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{270A778D-A060-4853-88FF-8DBD03C1B94C} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{6949C55E-34A8-4308-9B81-26798ACFE08B} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99B406E5-5CB9-4306-808C-311EFD2079A6}

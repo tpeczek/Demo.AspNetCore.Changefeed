@@ -7,9 +7,9 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
+namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 {
-    internal class ThreadStatsCosmosDbService : IThreadStatsChangefeedDbService, IDisposable
+    internal class ThreadStatsCosmosService : IThreadStatsChangefeedDbService, IDisposable
     {
         private class ThreadStatsItem : ThreadStats
         {
@@ -73,7 +73,7 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
             }
         }
 
-        public ThreadStatsCosmosDbService(IOptions<CosmosDbOptions> options)
+        public ThreadStatsCosmosService(IOptions<CosmosOptions> options)
         {
             if (options == null)
             {
@@ -82,12 +82,12 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
 
             if (String.IsNullOrWhiteSpace(options.Value.EndpointUrl))
             {
-                throw new ArgumentNullException(nameof(CosmosDbOptions.EndpointUrl));
+                throw new ArgumentNullException(nameof(CosmosOptions.EndpointUrl));
             }
 
             if (String.IsNullOrWhiteSpace(options.Value.AuthorizationKey))
             {
-                throw new ArgumentNullException(nameof(CosmosDbOptions.AuthorizationKey));
+                throw new ArgumentNullException(nameof(CosmosOptions.AuthorizationKey));
             }
 
             CosmosClientBuilder clientBuilder = new CosmosClientBuilder(options.Value.EndpointUrl, options.Value.AuthorizationKey);
@@ -109,7 +109,7 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
 
         public Task<IChangefeed<ThreadStats>> GetThreadStatsChangefeedAsync(CancellationToken cancellationToken)
         {
-            return Task.FromResult<IChangefeed<ThreadStats>>(new CosmosDbChangefeed<ThreadStatsItem>(
+            return Task.FromResult<IChangefeed<ThreadStats>>(new CosmosChangefeed<ThreadStatsItem>(
                 ThreadStatsContainer,
                 ThreadStatsLeaseContainer,
                 TimeSpan.FromSeconds(1)

@@ -1,12 +1,11 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
 using RethinkDb.Driver.Net;
 using RethinkDb.Driver.Model;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
+namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     internal class RethinkDbChangefeed<T> : IChangefeed<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
+﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     public class RethinkDbOptions
     {

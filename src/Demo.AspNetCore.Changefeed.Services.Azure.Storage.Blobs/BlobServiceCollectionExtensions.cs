@@ -1,13 +1,13 @@
 ﻿using System;
+using Demo.AspNetCore.Changefeed.Services.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
+namespace Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs
 {
-    public static class RethinkDbServiceCollectionExtensions
+    public static class BlobServiceCollectionExtensions
     {
-        public static IServiceCollection AddRethinkDb(this IServiceCollection services, Action<RethinkDbOptions> configureOptions)
+        public static IServiceCollection AddBlob(this IServiceCollection services, Action<BlobOptions> configureOptions)
         {
             if (services == null)
             {
@@ -20,8 +20,7 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
             }
 
             services.Configure(configureOptions);
-            services.TryAddSingleton<IRethinkDbSingletonProvider, RethinkDbSingletonProvider>();
-            services.TryAddTransient<IThreadStatsChangefeedDbService, ThreadStatsRethinkDbService>();
+            services.TryAddSingleton<IThreadStatsChangefeedDbService, ThreadStatsBlobService>();
 
             return services;
         }

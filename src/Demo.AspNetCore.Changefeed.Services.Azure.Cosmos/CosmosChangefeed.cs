@@ -5,9 +5,9 @@ using System.Runtime.CompilerServices;
 using Microsoft.Azure.Cosmos;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
+namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 {
-    internal class CosmosDbChangefeed<T> : IChangefeed<T>
+    internal class CosmosChangefeed<T> : IChangefeed<T>
     {
         private static DateTime _startTime = DateTime.Now;
 
@@ -15,7 +15,7 @@ namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
         private readonly Container _leaseContainer;
         private readonly TimeSpan _pollInterval;
 
-        public CosmosDbChangefeed(Container container, Container leaseContainer, TimeSpan pollInterval)
+        public CosmosChangefeed(Container container, Container leaseContainer, TimeSpan pollInterval)
         {
             _container = container;
             _leaseContainer = leaseContainer;

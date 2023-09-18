@@ -2,13 +2,13 @@
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace Demo.AspNetCore.Changefeed.Services.MongoDB
+namespace Demo.AspNetCore.Changefeed.Services.Mongo
 {
     internal class MongoClientSingletonProvider : IMongoClientSingletonProvider
     {
         public MongoClient MongoClientSingleton { get; }
 
-        public MongoClientSingletonProvider(IOptions<MongoDbOptions> options)
+        public MongoClientSingletonProvider(IOptions<MongoOptions> options)
         {
             if (options == null)
             {
@@ -17,7 +17,7 @@ namespace Demo.AspNetCore.Changefeed.Services.MongoDB
 
             if (String.IsNullOrWhiteSpace(options.Value.ConnectionString))
             {
-                throw new ArgumentNullException(nameof(MongoDbOptions.ConnectionString));
+                throw new ArgumentNullException(nameof(MongoOptions.ConnectionString));
             }
 
             MongoClientSingleton = new MongoClient(options.Value.ConnectionString);

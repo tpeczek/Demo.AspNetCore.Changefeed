@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.Extensions.Options;
 
-namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
+namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     internal class RethinkDbSingletonProvider : IRethinkDbSingletonProvider, IDisposable
     {
         private bool _disposed = false;
 
-        public RethinkDb.Driver.RethinkDB RethinkDbSingleton { get; }
+        public global::RethinkDb.Driver.RethinkDB RethinkDbSingleton { get; }
 
-        public RethinkDb.Driver.Net.Connection RethinkDbConnection { get; }
+        public global::RethinkDb.Driver.Net.Connection RethinkDbConnection { get; }
 
         public RethinkDbSingletonProvider(IOptions<RethinkDbOptions> options)
         {
@@ -23,7 +23,7 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
                 throw new ArgumentNullException(nameof(RethinkDbOptions.HostnameOrIp));
             }
 
-            var rethinkDbSingleton = RethinkDb.Driver.RethinkDB.R;
+            var rethinkDbSingleton = global::RethinkDb.Driver.RethinkDB.R;
 
             var rethinkDbConnection = rethinkDbSingleton.Connection().Hostname(options.Value.HostnameOrIp);
 

@@ -1,9 +1,9 @@
-﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
+﻿namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     internal interface IRethinkDbSingletonProvider
     {
-        RethinkDb.Driver.RethinkDB RethinkDbSingleton { get; }
+        global::RethinkDb.Driver.RethinkDB RethinkDbSingleton { get; }
 
-        RethinkDb.Driver.Net.Connection RethinkDbConnection { get; }
+        global::RethinkDb.Driver.Net.Connection RethinkDbConnection { get; }
     }
 }

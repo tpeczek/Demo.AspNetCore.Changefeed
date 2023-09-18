@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Demo.AspNetCore.Changefeed": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "thread-stats-observer.html",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:49290;http://localhost:49291"
+    }
+  }
+}

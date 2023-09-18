@@ -1,13 +1,13 @@
 ﻿using MongoDB.Bson;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.MongoDB
+namespace Demo.AspNetCore.Changefeed.Services.Mongo
 {
-    internal class MongoDbThreadStats : ThreadStats
+    internal class MongoThreadStats : ThreadStats
     {
         public ObjectId Id { get; set; }
 
-        public MongoDbThreadStats(ThreadStats threadStats)
+        public MongoThreadStats(ThreadStats threadStats)
         {
             WorkerThreads = threadStats.WorkerThreads;
             MinThreads = threadStats.MinThreads;
