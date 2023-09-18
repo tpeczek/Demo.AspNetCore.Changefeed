@@ -1,6 +1,6 @@
 ﻿using MongoDB.Driver;
 
-namespace Demo.AspNetCore.Changefeed.Services.MongoDB
+namespace Demo.AspNetCore.Changefeed.Services.Mongo
 {
     internal interface IMongoClientSingletonProvider
     {

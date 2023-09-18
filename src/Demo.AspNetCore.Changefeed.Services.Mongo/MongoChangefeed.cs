@@ -6,14 +6,14 @@ using MongoDB.Driver;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 using System.Runtime.CompilerServices;
 
-namespace Demo.AspNetCore.Changefeed.Services.MongoDB
+namespace Demo.AspNetCore.Changefeed.Services.Mongo
 {
-    internal class MongoDbChangefeed<T> : IChangefeed<T>
+    internal class MongoChangefeed<T> : IChangefeed<T>
     {
         private readonly IMongoCollection<T> _collection;
         private readonly TimeSpan _moveNextDelay;
 
-        public MongoDbChangefeed(IMongoCollection<T> collection, TimeSpan moveNextDelay)
+        public MongoChangefeed(IMongoCollection<T> collection, TimeSpan moveNextDelay)
         {
             _collection = collection;
             _moveNextDelay = moveNextDelay;

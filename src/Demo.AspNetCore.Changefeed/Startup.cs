@@ -1,50 +1,30 @@
-﻿using System;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Lib.AspNetCore.ServerSentEvents;
-using Demo.AspNetCore.Changefeed.Middlewares;
 using Demo.AspNetCore.Changefeed.Services;
-using Demo.AspNetCore.Changefeed.Services.CosmosDB;
-using Demo.AspNetCore.Changefeed.Services.MongoDB;
-using Demo.AspNetCore.Changefeed.Services.RethinkDB;
-using Demo.AspNetCore.Changefeed.Services.Abstractions;
+using Demo.AspNetCore.Changefeed.Middlewares;
 
 namespace Demo.AspNetCore.Changefeed
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            #region Cosmos DB
-            services.AddCosmosDb(options =>
-            {
-                options.EndpointUrl = "https://localhost:8081";
-                options.AuthorizationKey = "C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==";
-            });
-            #endregion
-
-            #region MongoDB
-            //services.AddMongoDb(options =>
-            //{
-            //    options.ConnectionString = "mongodb://localhost:27017";
-            //});
-            #endregion
-
-            #region RethinkDB
-            //services.AddRethinkDb(options =>
-            //{
-            //    options.HostnameOrIp = "127.0.0.1";
-            //});
-            #endregion
-
-            services.AddServerSentEvents();
-
-            services.AddWebSocketConnections();
-
-            services.AddThreadStats();
+            services.AddChangefeed(Configuration)
+                .AddServerSentEvents()
+                .AddWebSocketConnections()
+                .AddThreadStats();
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)

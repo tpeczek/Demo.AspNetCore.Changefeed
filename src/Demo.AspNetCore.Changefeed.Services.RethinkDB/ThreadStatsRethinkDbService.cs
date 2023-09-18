@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 using RethinkDb.Driver.Net;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.RethinkDB
+namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     internal class ThreadStatsRethinkDbService : IThreadStatsChangefeedDbService
     {
         private const string DATABASE_NAME = "Demo_AspNetCore_Changefeed_RethinkDB";
         private const string THREAD_STATS_TABLE_NAME = "ThreadStats";
 
-        private readonly RethinkDb.Driver.RethinkDB _rethinkDbSingleton;
+        private readonly global::RethinkDb.Driver.RethinkDB _rethinkDbSingleton;
         private readonly Connection _rethinkDbConnection;
 
         public ThreadStatsRethinkDbService(IRethinkDbSingletonProvider rethinkDbSingletonProvider)

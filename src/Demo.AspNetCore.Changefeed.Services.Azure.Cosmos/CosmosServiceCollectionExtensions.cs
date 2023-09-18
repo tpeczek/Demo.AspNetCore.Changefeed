@@ -3,11 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
-namespace Demo.AspNetCore.Changefeed.Services.MongoDB
+namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 {
-    public static class MongoDbServiceCollectionExtensions
+    public static class CosmosServiceCollectionExtensions
     {
-        public static IServiceCollection AddMongoDb(this IServiceCollection services, Action<MongoDbOptions> configureOptions)
+        public static IServiceCollection AddCosmos(this IServiceCollection services, Action<CosmosOptions> configureOptions)
         {
             if (services == null)
             {
@@ -20,8 +20,7 @@ namespace Demo.AspNetCore.Changefeed.Services.MongoDB
             }
 
             services.Configure(configureOptions);
-            services.TryAddSingleton<IMongoClientSingletonProvider, MongoClientSingletonProvider>();
-            services.TryAddTransient<IThreadStatsChangefeedDbService, ThreadStatsMongoDbService>();
+            services.TryAddSingleton<IThreadStatsChangefeedDbService, ThreadStatsCosmosService>();
 
             return services;
         }

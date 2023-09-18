@@ -1,6 +1,6 @@
-﻿namespace Demo.AspNetCore.Changefeed.Services.CosmosDB
+﻿namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 {
-    public class CosmosDbOptions
+    public class CosmosOptions
     {
         public string EndpointUrl { get; set; }
 
