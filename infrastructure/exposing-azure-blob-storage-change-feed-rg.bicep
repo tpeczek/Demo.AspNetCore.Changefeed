@@ -23,6 +23,16 @@ resource projectStorageAccount 'Microsoft.Storage/storageAccounts@2022-09-01' = 
   kind: 'StorageV2'
   properties: {
   }
+
+  resource blobService 'blobServices' = {
+    name: 'default'
+    properties: {
+      changeFeed: {
+        enabled: true
+        retentionInDays: 1
+      }
+    }
+  }
 }
 
 resource storageBlobDataContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {

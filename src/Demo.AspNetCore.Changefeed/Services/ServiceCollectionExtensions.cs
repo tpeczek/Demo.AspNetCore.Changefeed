@@ -25,9 +25,7 @@ namespace Demo.AspNetCore.Changefeed.Services
                     });
                     break;
                 case ChangefeedServices.AzureStorageBlobs:
-                    services.AddBlob(options =>
-                    {
-                    });
+                    services.AddBlob(configuration);
                     break;
                 case ChangefeedServices.Mongo:
                     services.AddMongo(options =>
