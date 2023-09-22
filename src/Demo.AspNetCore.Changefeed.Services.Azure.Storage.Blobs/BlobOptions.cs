@@ -4,6 +4,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs
 {
     public class BlobOptions
     {
-        public Uri ServiceUri { get; set; }
+        public Uri? ServiceUri { get; set; }
     }
 }

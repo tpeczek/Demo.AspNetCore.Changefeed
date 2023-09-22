@@ -2,8 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
-using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Options;
+using Azure.Core;
+using Azure.Identity;
 using Newtonsoft.Json;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
@@ -39,6 +40,7 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
         private const string PARTITION_KEY_PATH = "/" + PARTITION_KEY_PROPERTY;
         private const string PARTITION_KEY_VALUE = "1";
 
+        private readonly CosmosOptions _options;
         private readonly CosmosClient _cosmosClient;
         private readonly SemaphoreSlim _ensureDatabaseCreatedSemaphore = new SemaphoreSlim(1, 1);
         private Container _threadStatsContainer;
@@ -75,25 +77,13 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 
         public ThreadStatsCosmosService(IOptions<CosmosOptions> options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-            if (String.IsNullOrWhiteSpace(options.Value.EndpointUrl))
+            TokenCredential azureCredential = new DefaultAzureCredential();
+            _cosmosClient = new CosmosClient(_options.DocumentEndpoint, azureCredential, new CosmosClientOptions
             {
-                throw new ArgumentNullException(nameof(CosmosOptions.EndpointUrl));
-            }
-
-            if (String.IsNullOrWhiteSpace(options.Value.AuthorizationKey))
-            {
-                throw new ArgumentNullException(nameof(CosmosOptions.AuthorizationKey));
-            }
-
-            CosmosClientBuilder clientBuilder = new CosmosClientBuilder(options.Value.EndpointUrl, options.Value.AuthorizationKey);
-            _cosmosClient = clientBuilder
-                .WithConnectionModeDirect()
-                .Build();
+                ConnectionMode = ConnectionMode.Direct
+            });
         }
 
         public async Task EnsureDatabaseCreatedAsync()
