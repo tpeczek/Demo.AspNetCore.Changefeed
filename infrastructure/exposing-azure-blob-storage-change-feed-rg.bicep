@@ -81,6 +81,10 @@ resource projectAppService 'Microsoft.Web/sites@2022-09-01' = {
           value: projectManagedIdentity.properties.clientId
         }
         {
+          name: 'ChangefeedService'
+          value: 'AzureStorageBlobs'
+        }
+        {
           name: 'AzureStorageBlobs__ServiceUri'
           value: 'https://${projectStorageAccount.name}.blob.${environment().suffixes.storage}'
         }

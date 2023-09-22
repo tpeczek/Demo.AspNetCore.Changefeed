@@ -1,8 +1,8 @@
 ﻿using System;
-using Demo.AspNetCore.Changefeed.Services.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
 namespace Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs
 {
