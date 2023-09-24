@@ -10,7 +10,6 @@ var projectManagedIdentityName = 'id-exposing-change-feed'
 
 var changeFeedDatabaseName = 'Demo_AspNetCore_Changefeed_CosmosDB'
 var changeFeedContainerName = 'ThreadStats'
-var changeFeedLeaseContainerName = 'ThreadStatsLease'
 
 resource projectManagedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: projectManagedIdentityName
@@ -78,25 +77,6 @@ resource projectCosmosAccount 'Microsoft.DocumentDB/databaseAccounts@2023-04-15'
           partitionKey: {
             paths: [
               '/partionKey'
-            ]
-            kind: 'Hash'
-          }
-          indexingPolicy: {
-            automatic: false
-            indexingMode: 'none'
-          }
-        }
-      }
-    }
-
-    resource changeFeedLeaseContainer 'containers' = {
-      name: changeFeedLeaseContainerName
-      properties: {
-        resource: {
-          id: changeFeedLeaseContainerName
-          partitionKey: {
-            paths: [
-              '/id'
             ]
             kind: 'Hash'
           }

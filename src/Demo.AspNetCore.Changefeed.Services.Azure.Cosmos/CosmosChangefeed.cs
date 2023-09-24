@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Net;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.Azure.Cosmos;
@@ -9,67 +11,36 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 {
     internal class CosmosChangefeed<T> : IChangefeed<T>
     {
-        private static DateTime _startTime = DateTime.Now;
+        private static DateTime _startTime = DateTime.UtcNow;
 
         private readonly Container _container;
-        private readonly Container _leaseContainer;
         private readonly TimeSpan _pollInterval;
 
-        public CosmosChangefeed(Container container, Container leaseContainer, TimeSpan pollInterval)
+        public CosmosChangefeed(Container container, TimeSpan pollInterval)
         {
             _container = container;
-            _leaseContainer = leaseContainer;
             _pollInterval = pollInterval;
         }
 
-        public async IAsyncEnumerable<T> FetchFeed([EnumeratorCancellation]CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<T> FetchFeed([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
-            IReadOnlyCollection<T> changesToProcess = null;
-            SemaphoreSlim changesToProcessSignal = new SemaphoreSlim(0, 1);
-            SemaphoreSlim changesProcessedSignal = new SemaphoreSlim(0, 1);            
+            FeedIterator<T> changeFeedIterator = _container.GetChangeFeedIterator<T>(ChangeFeedStartFrom.Time(_startTime), ChangeFeedMode.LatestVersion);
 
-            ChangeFeedProcessor changeFeedProcessor = _container.GetChangeFeedProcessorBuilder<T>($"{typeof(T).Name}_ChangeFeedProcessor", async (changes, cancellationToken) =>
+            while (changeFeedIterator.HasMoreResults && !cancellationToken.IsCancellationRequested)
             {
-                if ((changes != null) && changes.Count > 0)
+                FeedResponse<T> changeFeedResponse = await changeFeedIterator.ReadNextAsync(cancellationToken);
+
+                if (changeFeedResponse.StatusCode == HttpStatusCode.NotModified)
                 {
-                    changesToProcess = changes;
-
-                    changesToProcessSignal.Release();
-
-                    try
-                    {
-                        await changesProcessedSignal.WaitAsync(cancellationToken);
-                    }
-                    catch (OperationCanceledException)
-                    { }
+                    await Task.Delay(_pollInterval, cancellationToken);
                 }
-            })
-            .WithInstanceName("Demo.AspNetCore.Changefeed")
-            .WithStartTime(_startTime)
-            .WithPollInterval(_pollInterval)
-            .WithLeaseContainer(_leaseContainer)
-            .Build();
-
-            await changeFeedProcessor.StartAsync();
-
-            try
-            {
-                while (!cancellationToken.IsCancellationRequested)
+                else
                 {
-                    await changesToProcessSignal.WaitAsync(cancellationToken);
-
-                    foreach (T item in changesToProcess)
+                    foreach (T item in changeFeedResponse)
                     {
                         yield return item;
                     }
-                    changesToProcess = null;
-
-                    changesProcessedSignal.Release();
                 }
-            }
-            finally
-            {
-                await changeFeedProcessor.StopAsync();
             }
         }
     }

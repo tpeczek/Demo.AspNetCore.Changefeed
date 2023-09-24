@@ -35,7 +35,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 
         private const string DATABASE_NAME = "Demo_AspNetCore_Changefeed_CosmosDB";
         private const string THREAD_STATS_CONTAINER_NAME = "ThreadStats";
-        private const string THREAD_STATS_LEASE_CONTAINER_NAME = "ThreadStatsLease";
         private const string PARTITION_KEY_PROPERTY = "partionKey";
         private const string PARTITION_KEY_PATH = "/" + PARTITION_KEY_PROPERTY;
         private const string PARTITION_KEY_VALUE = "1";
@@ -44,7 +43,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
         private readonly CosmosClient _cosmosClient;
         private readonly SemaphoreSlim _ensureDatabaseCreatedSemaphore = new SemaphoreSlim(1, 1);
         private Container _threadStatsContainer;
-        private Container _threadStatsLeaseContainer;
         private readonly PartitionKey _partitionKey = new PartitionKey(PARTITION_KEY_VALUE);
 
         private bool _disposed = false;
@@ -59,19 +57,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
                 }
 
                 return _threadStatsContainer;
-            }
-        }
-
-        private Container ThreadStatsLeaseContainer
-        {
-            get
-            {
-                if (_threadStatsLeaseContainer is null)
-                {
-                    _threadStatsLeaseContainer = _cosmosClient.GetContainer(DATABASE_NAME, THREAD_STATS_LEASE_CONTAINER_NAME);
-                }
-
-                return _threadStatsLeaseContainer;
             }
         }
 
@@ -92,7 +77,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
 
             Database database = await _cosmosClient.CreateDatabaseIfNotExistsAsync(DATABASE_NAME);
             await database.CreateContainerIfNotExistsAsync(THREAD_STATS_CONTAINER_NAME, PARTITION_KEY_PATH);
-            await database.CreateContainerIfNotExistsAsync(THREAD_STATS_LEASE_CONTAINER_NAME, "/id");
 
             _ensureDatabaseCreatedSemaphore.Release();
         }
@@ -101,7 +85,6 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Cosmos
         {
             return Task.FromResult<IChangefeed<ThreadStats>>(new CosmosChangefeed<ThreadStatsItem>(
                 ThreadStatsContainer,
-                ThreadStatsLeaseContainer,
                 TimeSpan.FromSeconds(1)
             ));
         }
