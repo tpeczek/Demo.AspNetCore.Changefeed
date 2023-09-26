@@ -1,8 +1,49 @@
-name: 02. Exposing MongoDB Change Feed
+name: 02. Exposing Mongo Change Feed
 on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
 jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Deploy Bicep
+      uses: azure/arm-deploy@v1
+      with:
+        scope: subscription
+        region:  westeurope
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        deploymentName: exposing-mongo-change-feed
+        template: ./infrastructure/exposing-mongo-change-feed.bicep
+    - name: Azure Logout
+      run: |
+        az logout
+        az cache purge
+        az account clear
+  initiate-replica-set:
+    runs-on: windows-latest
+    needs: deploy-infrastructure
+    steps:
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Initiate the MongoDB Replica Set
+      shell: pwsh
+      run: |
+        az container exec --resource-group rg-exposing-mongo-change-feed --name ci-mongo-community --exec-command "mongosh --eval """"rs.initiate({_id:'rs0',members:[{_id:0,host:'localhost:27017'}]})"""""
+    - name: Azure Logout
+      run: |
+        az logout
+        az cache purge
+        az account clear
