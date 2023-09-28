@@ -24,10 +24,7 @@ namespace Demo.AspNetCore.Changefeed.Services
                     services.AddBlob(configuration);
                     break;
                 case ChangefeedServices.Mongo:
-                    services.AddMongo(options =>
-                    {
-                        options.ConnectionString = "mongodb://localhost:27017";
-                    });
+                    services.AddMongo(configuration);
                     break;
                 case ChangefeedServices.RethinkDb:
                     services.AddRethinkDb(options =>
