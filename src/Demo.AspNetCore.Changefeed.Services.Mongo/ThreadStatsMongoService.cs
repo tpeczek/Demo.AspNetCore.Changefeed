@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace Demo.AspNetCore.Changefeed.Services.Mongo
 {
@@ -11,19 +12,17 @@ namespace Demo.AspNetCore.Changefeed.Services.Mongo
         private const string DATABASE_NAME = "Demo_AspNetCore_Changefeed_MongoDB";
         private const string THREAD_STATS_COLLECTION_NAME = "ThreadStats";
 
-        private readonly MongoClient _mongoClientSingleton;
+        private readonly MongoOptions _options;
+        public readonly MongoClient _mongoClient;
         private readonly IMongoDatabase _threadStatsDatabase;
         private readonly IMongoCollection<MongoThreadStats> _threadStatsCollection;
 
-        public ThreadStatsMongoService(IMongoClientSingletonProvider mongoClientSingletonProvider)
+        public ThreadStatsMongoService(IOptions<MongoOptions> options)
         {
-            if (mongoClientSingletonProvider == null)
-            {
-                throw new ArgumentNullException(nameof(mongoClientSingletonProvider));
-            }
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
 
-            _mongoClientSingleton = mongoClientSingletonProvider.MongoClientSingleton;
-            _threadStatsDatabase = _mongoClientSingleton.GetDatabase(DATABASE_NAME);
+            _mongoClient = new MongoClient(_options.ConnectionString);
+            _threadStatsDatabase = _mongoClient.GetDatabase(DATABASE_NAME);
             _threadStatsCollection = _threadStatsDatabase.GetCollection<MongoThreadStats>(THREAD_STATS_COLLECTION_NAME);
         }
 
