@@ -1,8 +1,30 @@
 name: 01. Exposing RethinkDB Change Feed
 on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
 jobs:
-    deploy:
-      runs-on: ubuntu-latest
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  deploy-infrastructure:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Deploy Bicep
+      uses: azure/arm-deploy@v1
+      with:
+        scope: subscription
+        region:  westeurope
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        deploymentName: exposing-rethinkdb-change-feed
+        template: ./infrastructure/exposing-rethinkdb-change-feed.bicep
+    - name: Azure Logout
+      run: |
+        az logout
+        az cache purge
+        az account clear

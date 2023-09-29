@@ -5,11 +5,11 @@ param location string = resourceGroup().location
 var projectAppServiceName = 'app-exposing-change-feed'
 var projectAppServicePlanSku = 'F1'
 var projectAppServicePlanName = 'asp-exposing-change-feed'
-var projectContainerInstanceName = 'ci-mongo-community'
-var projectContainerDnsNameLabel = 'mongo-community-${uniqueString(resourceGroup().id)}'
+var projectContainerInstanceName = 'ci-rethinkdb'
+var projectContainerDnsNameLabel = 'rethinkdb-${uniqueString(resourceGroup().id)}'
 
-var mongoCommunityImageName = 'mongodb-community-server'
-var mongoCommunityImageTag = '7.0.1-ubuntu2204'
+var rethinkDbImageName = 'rethinkdb'
+var rethinkDbImageTag = '2.4.2'
 
 resource projectContainerInstance 'Microsoft.ContainerInstance/containerGroups@2023-05-01' = {
   name: projectContainerInstanceName
@@ -21,7 +21,11 @@ resource projectContainerInstance 'Microsoft.ContainerInstance/containerGroups@2
       type: 'Public'
       ports: [
         { 
-          port: 27017
+          port: 28015
+          protocol: 'TCP'
+        }
+        { 
+          port: 8080
           protocol: 'TCP'
         }
       ]
@@ -29,19 +33,24 @@ resource projectContainerInstance 'Microsoft.ContainerInstance/containerGroups@2
     }
     containers: [
       {
-        name: mongoCommunityImageName
+        name: rethinkDbImageName
         properties: {
-          image: 'mongodb/${mongoCommunityImageName}:${mongoCommunityImageTag}'
-          command: ['mongod', '--replSet', 'rs0', '--bind_ip_all']
+          image: '${rethinkDbImageName}:${rethinkDbImageTag}'
           ports: [
+            // Client driver
             { 
-              port: 27017
+              port: 28015
+              protocol: 'TCP'
+            }
+            // Administrative HTTP
+            { 
+              port: 8080
               protocol: 'TCP'
             }
           ]
           resources: {
             requests: {
-              cpu: 2
+              cpu: 1
               memoryInGB: 1
             }
           }
@@ -73,11 +82,11 @@ resource projectAppService 'Microsoft.Web/sites@2022-09-01' = {
       appSettings: [
         {
           name: 'ChangefeedService'
-          value: 'Mongo'
+          value: 'RethinkDb'
         }
         {
-          name: 'Mongo__ConnectionString'
-          value: 'mongodb://${projectContainerDnsNameLabel}.${location}.azurecontainer.io:27017'
+          name: 'RethinkDb__Hostname'
+          value: '${projectContainerDnsNameLabel}.${location}.azurecontainer.io'
         }
       ]
     }
