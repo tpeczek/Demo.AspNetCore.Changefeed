@@ -2,7 +2,7 @@
 {
     public class RethinkDbOptions
     {
-        public string HostnameOrIp { get; set; }
+        public string Hostname { get; set; }
 
         public int? DriverPort { get; set; }
 

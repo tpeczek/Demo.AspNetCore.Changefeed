@@ -17,20 +17,17 @@ namespace Demo.AspNetCore.Changefeed.Services
         {
             switch (configuration.GetChangefeedService())
             {
+                case ChangefeedServices.RethinkDb:
+                    services.AddRethinkDb(configuration);
+                    break;
                 case ChangefeedServices.AzureCosmos:
                     services.AddCosmos(configuration);
-                    break;
-                case ChangefeedServices.AzureStorageBlobs:
-                    services.AddBlob(configuration);
                     break;
                 case ChangefeedServices.Mongo:
                     services.AddMongo(configuration);
                     break;
-                case ChangefeedServices.RethinkDb:
-                    services.AddRethinkDb(options =>
-                    {
-                        options.HostnameOrIp = "127.0.0.1";
-                    });
+                case ChangefeedServices.AzureStorageBlobs:
+                    services.AddBlob(configuration);
                     break;
                 default:
                     throw new NotSupportedException($"Not supported changefeed type.");
