@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
@@ -7,21 +8,25 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
     public static class RethinkDbServiceCollectionExtensions
     {
-        public static IServiceCollection AddRethinkDb(this IServiceCollection services, Action<RethinkDbOptions> configureOptions)
+        private const string HOSTNAME_CONFIGURATION_KEY = "RethinkDb:Hostname";
+
+        public static IServiceCollection AddRethinkDb(this IServiceCollection services, IConfiguration configuration)
         {
-            if (services == null)
+            if (services is null)
             {
                 throw new ArgumentNullException(nameof(services));
             }
 
-            if (configureOptions == null)
+            if (configuration is null)
             {
-                throw new ArgumentNullException(nameof(configureOptions));
+                throw new ArgumentNullException(nameof(configuration));
             }
 
-            services.Configure(configureOptions);
-            services.TryAddSingleton<IRethinkDbSingletonProvider, RethinkDbSingletonProvider>();
-            services.TryAddTransient<IThreadStatsChangefeedDbService, ThreadStatsRethinkDbService>();
+            services.Configure<RethinkDbOptions>(options =>
+            {
+                options.Hostname = configuration[HOSTNAME_CONFIGURATION_KEY];
+            });
+            services.TryAddSingleton<IThreadStatsChangefeedDbService, ThreadStatsRethinkDbService>();
 
             return services;
         }

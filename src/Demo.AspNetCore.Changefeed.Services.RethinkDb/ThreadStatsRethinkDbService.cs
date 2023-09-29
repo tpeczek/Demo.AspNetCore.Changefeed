@@ -2,28 +2,42 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using RethinkDb.Driver.Net;
 using Demo.AspNetCore.Changefeed.Services.Abstractions;
 
 namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
 {
-    internal class ThreadStatsRethinkDbService : IThreadStatsChangefeedDbService
+    internal class ThreadStatsRethinkDbService : IThreadStatsChangefeedDbService, IDisposable
     {
         private const string DATABASE_NAME = "Demo_AspNetCore_Changefeed_RethinkDB";
         private const string THREAD_STATS_TABLE_NAME = "ThreadStats";
 
+        private readonly RethinkDbOptions _options;
         private readonly global::RethinkDb.Driver.RethinkDB _rethinkDbSingleton;
         private readonly Connection _rethinkDbConnection;
 
-        public ThreadStatsRethinkDbService(IRethinkDbSingletonProvider rethinkDbSingletonProvider)
+        private bool _disposed = false;
+
+        public ThreadStatsRethinkDbService(IOptions<RethinkDbOptions> options)
         {
-            if (rethinkDbSingletonProvider == null)
+            _options = options?.Value ?? throw new ArgumentNullException(nameof(options));
+
+            _rethinkDbSingleton = global::RethinkDb.Driver.RethinkDB.R;
+
+            var rethinkDbConnectionBuilder = _rethinkDbSingleton.Connection().Hostname(options.Value.Hostname);
+
+            if (_options.DriverPort.HasValue)
             {
-                throw new ArgumentNullException(nameof(rethinkDbSingletonProvider));
+                rethinkDbConnectionBuilder.Port(options.Value.DriverPort.Value);
             }
 
-            _rethinkDbSingleton = rethinkDbSingletonProvider.RethinkDbSingleton;
-            _rethinkDbConnection = rethinkDbSingletonProvider.RethinkDbConnection;
+            if (_options.Timeout.HasValue)
+            {
+                rethinkDbConnectionBuilder.Timeout(options.Value.Timeout.Value);
+            }
+
+            _rethinkDbConnection = rethinkDbConnectionBuilder.Connect();
         }
 
         public Task EnsureDatabaseCreatedAsync()
@@ -54,6 +68,18 @@ namespace Demo.AspNetCore.Changefeed.Services.RethinkDb
             return new RethinkDbChangefeed<ThreadStats>(
                 await _rethinkDbSingleton.Db(DATABASE_NAME).Table(THREAD_STATS_TABLE_NAME).Changes().RunChangesAsync<ThreadStats>(_rethinkDbConnection, cancellationToken)
             );
+        }
+
+        public void Dispose()
+        {
+            if (!_disposed)
+            {
+                _rethinkDbConnection.Dispose();
+
+                GC.SuppressFinalize(this);
+
+                _disposed = true;
+            }
         }
     }
 }
