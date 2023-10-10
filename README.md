@@ -2,10 +2,10 @@
 
 Sample application showing how to expose various databases changefeed from ASP.NET Core:
 
+- [Exposing RethinkDB changefeed from ASP.NET Core](https://www.tpeczek.com/2018/05/exposing-rethinkdb-changefeed-from.html)
 - [Exposing Cosmos DB change feed from ASP.NET Core](https://www.tpeczek.com/2018/08/exposing-cosmos-db-change-feed-from.html)
 - [Exposing Cosmos DB change feed from ASP.NET Core - Revisited](https://www.tpeczek.com/2020/01/exposing-cosmos-db-change-feed-from.html)
-- Exposing MongoDB change feed from ASP.NET Core
-- [Exposing RethinkDB changefeed from ASP.NET Core](https://www.tpeczek.com/2018/05/exposing-rethinkdb-changefeed-from.html)
+- [Revisiting Various Change Feeds Consumption in .NET](https://www.tpeczek.com/2023/10/revisiting-various-change-feeds.html)
 
 ## Donating
 
