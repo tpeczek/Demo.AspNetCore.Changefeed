@@ -6,7 +6,7 @@
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.35.4" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Azure.Identity" Version="1.10.2" />
+    <PackageReference Include="Azure.Identity" Version="1.11.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj" />
