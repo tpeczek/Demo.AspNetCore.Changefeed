@@ -114,7 +114,7 @@ resource projectAppService 'Microsoft.Web/sites@2022-09-01' = {
   properties: {
     serverFarmId: projectAppServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'DOTNETCORE|7.0'
+      linuxFxVersion: 'DOTNETCORE|8.0'
       appSettings: [
         {
           name: 'AZURE_CLIENT_ID'

@@ -10,13 +10,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - name: Deploy Bicep
-      uses: azure/arm-deploy@v1
+      uses: azure/arm-deploy@v2
       with:
         scope: subscription
         region:  westeurope
@@ -34,10 +34,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - name: Setup .NET 7.0 SDK
-      uses: actions/setup-dotnet@v3.2.0
+    - name: Setup .NET 8.0 SDK
+      uses: actions/setup-dotnet@v4.0.0
       with:
-        dotnet-version: '7.0.x'
+        dotnet-version: '8.0.x'
     - name: Restore
       run: dotnet restore ./src/Demo.AspNetCore.Changefeed
     - name: Build
@@ -45,13 +45,13 @@ jobs:
     - name: Publish
       run: dotnet publish ./src/Demo.AspNetCore.Changefeed --configuration Release --no-build --output ${DOTNET_ROOT}/app-exposing-change-feed
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v2
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     - name: Deploy
-      uses: azure/webapps-deploy@v2
+      uses: azure/webapps-deploy@v3
       with:
         app-name: app-exposing-change-feed
         package: ${{env.DOTNET_ROOT}}/app-exposing-change-feed
