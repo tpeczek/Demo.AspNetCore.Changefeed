@@ -8,6 +8,7 @@ using Demo.AspNetCore.Changefeed.Services.Azure.Cosmos;
 using Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs;
 using Demo.AspNetCore.Changefeed.Services.Mongo;
 using Demo.AspNetCore.Changefeed.Services.RethinkDb;
+using Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB;
 
 namespace Demo.AspNetCore.Changefeed.Services
 {
@@ -28,6 +29,9 @@ namespace Demo.AspNetCore.Changefeed.Services
                     break;
                 case ChangefeedServices.AzureStorageBlobs:
                     services.AddBlob(configuration);
+                    break;
+                case ChangefeedServices.AmazonDynamoDB:
+                    services.AddDynamoDB(configuration);
                     break;
                 default:
                     throw new NotSupportedException($"Not supported changefeed type.");

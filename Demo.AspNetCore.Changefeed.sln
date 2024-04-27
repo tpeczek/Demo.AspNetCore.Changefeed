@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs", "src\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs.csproj", "{6949C55E-34A8-4308-9B81-26798ACFE08B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs", "src\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs.csproj", "{6949C55E-34A8-4308-9B81-26798ACFE08B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB", "src\Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB\Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB.csproj", "{D66ABDEB-EEC2-4922-8EE7-37458109D5AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6949C55E-34A8-4308-9B81-26798ACFE08B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D66ABDEB-EEC2-4922-8EE7-37458109D5AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D66ABDEB-EEC2-4922-8EE7-37458109D5AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D66ABDEB-EEC2-4922-8EE7-37458109D5AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D66ABDEB-EEC2-4922-8EE7-37458109D5AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{6D514F12-FBF5-4375-B979-8E1F3B81ADDE} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 		{553DE0BE-E33D-40B4-B5C9-AA2409F80F86} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 		{6949C55E-34A8-4308-9B81-26798ACFE08B} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
+		{D66ABDEB-EEC2-4922-8EE7-37458109D5AE} = {8E5E16FD-A10C-4ADC-99C0-9DF27D7FD81B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {99B406E5-5CB9-4306-808C-311EFD2079A6}

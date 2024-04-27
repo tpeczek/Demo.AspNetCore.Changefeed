@@ -7,6 +7,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Abstractions\Demo.AspNetCore.Changefeed.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB\Demo.AspNetCore.Changefeed.Services.Amazon.DynamoDB.csproj" />
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Azure.Cosmos\Demo.AspNetCore.Changefeed.Services.Azure.Cosmos.csproj" />
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs\Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs.csproj" />
     <ProjectReference Include="..\Demo.AspNetCore.Changefeed.Services.Mongo\Demo.AspNetCore.Changefeed.Services.Mongo.csproj" />
