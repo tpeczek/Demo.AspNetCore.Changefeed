@@ -12,15 +12,8 @@ namespace Demo.AspNetCore.Changefeed.Services.Azure.Storage.Blobs
 
         public static IServiceCollection AddBlob(this IServiceCollection services, IConfiguration configuration)
         {
-            if (services is null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configuration);
 
             services.Configure<BlobOptions>(options =>
             {

@@ -5,6 +5,7 @@
         AzureCosmos,
         AzureStorageBlobs,
         Mongo,
-        RethinkDb
+        RethinkDb,
+        AmazonDynamoDB
     }
 }

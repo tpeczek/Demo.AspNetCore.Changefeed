@@ -12,15 +12,8 @@ namespace Demo.AspNetCore.Changefeed.Services.Mongo
 
         public static IServiceCollection AddMongo(this IServiceCollection services, IConfiguration configuration)
         {
-            if (services == null)
-            {
-                throw new ArgumentNullException(nameof(services));
-            }
-
-            if (configuration is null)
-            {
-                throw new ArgumentNullException(nameof(configuration));
-            }
+            ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configuration);
 
             services.Configure<MongoOptions>(options =>
             {
