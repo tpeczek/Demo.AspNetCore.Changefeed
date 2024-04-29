@@ -1,5 +1,11 @@
 name: 05. Exposing Amazon DynamoDB Stream
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      AWS_REGION:
+        description: 'AWS Region'
+        required: true
+        default: 'eu-central-1'
 permissions:
   id-token: write
   contents: read
@@ -9,15 +15,50 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ github.event.inputs.AWS_REGION }}
+    - name: Deploy CloudFormation Stack
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: 'exposing-dynamodb-stream-ecr'
+        template: './infrastructure/exposing-amazon-dynamodb-stream-ecr.yml'
   build-and-push-webapp-image:
     runs-on: ubuntu-latest
     needs: deploy-elastic-container-registry
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ github.event.inputs.AWS_REGION }}
+    - name: Login to Container Registry
+      id: container-registry-login
+      uses: aws-actions/amazon-ecr-login@v2
+    - name: Docker Build
+      run: |
+        docker build './src/' -t ${{ steps.container-registry-login.outputs.registry }}/app-exposing-dynamodb-stream-repository:1.0.0
+    - name: Docker Push
+      run: |
+        docker push ${{ steps.container-registry-login.outputs.registry }}/app-exposing-dynamodb-stream-repository:1.0.0
   deploy-infrastructure:
     runs-on: ubuntu-latest
     needs: [deploy-elastic-container-registry, build-and-push-webapp-image]
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        aws-region: ${{ github.event.inputs.AWS_REGION }}
+    - name: Deploy CloudFormation Stack
+      uses: aws-actions/aws-cloudformation-github-deploy@v1
+      with:
+        name: 'exposing-dynamodb-stream-apprunner'
+        template: './infrastructure/exposing-amazon-dynamodb-stream-apprunner.yml'
+        capabilities: 'CAPABILITY_NAMED_IAM'

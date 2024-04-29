@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  AppName:
+    Type: String
+    Default: 'app-exposing-dynamodb-stream'
+
+Resources:
+  ProjectContainerRegistry:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${AppName}-repository'
+      EmptyOnDelete: true

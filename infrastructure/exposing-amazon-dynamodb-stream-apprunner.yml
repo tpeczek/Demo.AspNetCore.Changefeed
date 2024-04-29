@@ -1,0 +1,67 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  AppName:
+    Type: String
+    Default: 'app-exposing-dynamodb-stream'
+  AppVersion:
+    Type: String
+    Default: '1.0.0'
+
+Resources:
+  ProjectContainerRegistryAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AppName}-access-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - build.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSAppRunnerServicePolicyForECRAccess
+  ProjectAppRunnerServiceInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${AppName}-instance-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - tasks.apprunner.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        # This is overly permissive, just for a demo
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+  ProjectAppRunnerService:
+    Type: AWS::AppRunner::Service
+    Properties:
+      ServiceName: !Sub '${AppName}-app'
+      SourceConfiguration:
+        AuthenticationConfiguration:
+          AccessRoleArn: !GetAtt ProjectContainerRegistryAccessRole.Arn
+        AutoDeploymentsEnabled: true
+        ImageRepository:
+          ImageIdentifier: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${AppName}-repository:${AppVersion}'
+          ImageRepositoryType: 'ECR'
+          ImageConfiguration:
+            Port: 8080
+            RuntimeEnvironmentVariables: [
+              {
+                'Name': 'ChangefeedService',
+                'Value': 'AmazonDynamoDB'
+              },
+              {
+                'Name': 'AmazonDynamoDB__RegionSystemName',
+                'Value': !Sub '${AWS::Region}'
+              }
+          ]
+      InstanceConfiguration:
+        Cpu: '0.25 vCPU'
+        Memory: '0.5 GB'
+        InstanceRoleArn: !GetAtt ProjectAppRunnerServiceInstanceRole.Arn
