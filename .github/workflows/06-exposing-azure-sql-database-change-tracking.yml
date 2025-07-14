@@ -1,0 +1,39 @@
+name: 06. Exposing Azure SQL Database Change Tracking
+on: workflow_dispatch
+permissions:
+  id-token: write
+  contents: read
+jobs:
+    deploy-infrastructure:
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Azure Logout
+        run: |
+          az logout
+          az cache purge
+          az account clear
+    deploy-webapp:
+      runs-on: ubuntu-latest
+      needs: deploy-infrastructure
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Azure Logout
+        run: |
+          az logout
+          az cache purge
+          az account clear
