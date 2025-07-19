@@ -15,6 +15,22 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Deploy Bicep
+        id: deploy-bicep
+        uses: azure/arm-deploy@v2
+        with:
+          scope: subscription
+          region:  westeurope
+          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+          deploymentName: exposing-azure-sql-database-change-tracking
+          template: ./infrastructure/exposing-azure-sql-database-change-tracking.bicep
+          parameters: 'azureClientId=${{ secrets.AZURE_CLIENT_ID }}'
+      - name: Create Azure SQL Database Contained User
+        uses: Azure/sql-action@v2.3
+        with:
+          connection-string: 'Server=${{ steps.deploy-bicep.outputs.sqlServerFqdn }};Authentication=Active Directory Default; Encrypt=True; Database=${{ steps.deploy-bicep.outputs.sqlDatabaseName }}'
+          path: ./infrastructure/create-azure-sql-database-contained-user.sql
+          arguments: '-v ManagedIdentityName="${{ steps.deploy-bicep.outputs.managedIdentityName }}"'
       - name: Azure Logout
         run: |
           az logout
