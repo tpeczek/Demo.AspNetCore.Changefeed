@@ -3,6 +3,7 @@
     internal enum ChangefeedServices
     {
         AzureCosmos,
+        AzureSqlDatabase,
         AzureStorageBlobs,
         Mongo,
         RethinkDb,
